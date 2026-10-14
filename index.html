@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#193c2b">
+<meta name="description" content="Bezmaksas apģērbu krājumu, sludinājumu un peļņas pārvaldības asistents.">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Resell Assistant</title>
+<style>
+:root{color-scheme:light;--bg:#f4f6f2;--card:#fff;--ink:#1a2b21;--muted:#647368;--line:#dce4dc;--green:#1c6846;--soft:#e7f2ea;--red:#a32e2e;--amber:#fff3d7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}header{background:#193c2b;color:white;padding:20px 16px 15px;position:sticky;top:0;z-index:5}header h1{font-size:22px;margin:0}header p{font-size:12px;color:#d3e4d8;margin:3px 0 0}main{max-width:850px;margin:auto;padding:12px 12px 40px}.notice{background:var(--amber);border:1px solid #efd99d;padding:11px 12px;border-radius:12px;font-size:12px;margin-bottom:12px}.nav{display:flex;gap:7px;overflow:auto;padding:2px 0 12px}.nav button{white-space:nowrap;border-radius:999px;padding:9px 13px}.btn{border:0;border-radius:11px;padding:11px 13px;background:var(--green);color:white;font:inherit;font-weight:700;cursor:pointer}.btn.secondary{background:#e8eee8;color:var(--ink)}.btn.danger{background:#f8e5e5;color:var(--red)}.btn.active{background:var(--green);color:white}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:12px}.page{display:none}.page.active{display:block}h2{font-size:18px;margin:0 0 12px}h3{font-size:14px;margin:0 0 6px}.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{background:var(--soft);border-radius:12px;padding:12px}.metric span{display:block;color:var(--muted);font-size:12px}.metric strong{font-size:21px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px}label{display:block;font-weight:650;font-size:12px;margin:9px 0 4px}input,select,textarea{font:inherit;font-size:15px;width:100%;border:1px solid #cbd7cc;border-radius:10px;padding:10px;background:white;color:var(--ink)}textarea{min-height:84px;resize:vertical}input[type=file]{font-size:12px;padding:8px}.muted{color:var(--muted);font-size:13px}.tiny{font-size:11px;color:var(--muted)}.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.actions .btn{font-size:13px}.product{display:grid;grid-template-columns:70px minmax(0,1fr);gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;margin-top:9px;background:#fff}.photo{width:70px;height:84px;border-radius:9px;object-fit:cover;background:#edf0ec}.prodtitle{font-weight:750}.meta{font-size:12px;color:var(--muted);margin-top:3px}.pill{display:inline-block;font-size:10px;border-radius:999px;background:#edf1ed;padding:3px 7px;margin-top:4px}.output{white-space:pre-wrap;background:#f2f6f2;border:1px dashed #c4d2c5;border-radius:10px;padding:12px;font-size:14px;min-height:50px}.hidden{display:none!important}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#193c2b;color:#fff;border-radius:12px;padding:10px 14px;z-index:20;font-size:13px;max-width:90%;box-shadow:0 4px 18px #0002}footer{text-align:center;color:var(--muted);font-size:11px;padding:12px}@media(min-width:650px){main{padding:22px}.metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.formgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header><h1>Resell Assistant</h1><p>Apģērbu katalogs · sludinājumu sagatavošana · peļņas uzskaite</p></header>
+<main>
+<div class="notice"><b>Platformas noteikumi:</b> šī lietotne nepieslēdzas Vinted, nepublicē sludinājumus un nesūta ziņas. Izmanto to tikai ar pārdošanas kanāliem un integrācijām, kuras tev ir atļautas. Vinted noteikumi Latvijā ierobežo profesionālu tālākpārdošanu standarta kontā.</div>
+<nav class="nav" aria-label="Navigācija">
+<button class="btn active" data-page="dashboard">Pārskats</button><button class="btn secondary" data-page="form">+ Prece</button><button class="btn secondary" data-page="inventory">Katalogs</button><button class="btn secondary" data-page="messages">Atbilžu šabloni</button><button class="btn secondary" data-page="backup">Dati</button>
+</nav>
+<section class="page active" id="dashboard">
+<div class="metrics">
+<div class="metric"><span>Preces kopā</span><strong id="mTotal">0</strong></div>
+<div class="metric"><span>Pārdotas</span><strong id="mSold">0</strong></div>
+<div class="metric"><span>Krājumu pašizmaksa</span><strong id="mStock">0,00 €</strong></div>
+<div class="metric"><span>Realizētā peļņa*</span><strong id="mProfit">0,00 €</strong></div>
+</div>
+<div class="card" style="margin-top:12px"><h2>Ātrās darbības</h2><div class="actions"><button class="btn" id="newProduct">Pievienot preci</button><button class="btn secondary" id="exportCsv">Eksportēt CSV</button><button class="btn secondary" id="backupNow">Rezerves kopija</button></div><p class="muted">Dati glabājas šajā pārlūkprogrammā. Regulāri izveido rezerves kopiju. Pēc pārlūka datu dzēšanas vai ierīces maiņas dati var pazust.</p></div>
+<div class="card"><h2>Pēdējās preces</h2><div id="recentList" class="muted">Pievieno pirmo preci, lai sāktu.</div></div>
+<div class="card"><h2>Darba kārtība</h2><p class="muted">1. Ievadi patiesus preces datus un foto. 2. Sagatavo sludinājuma melnrakstu. 3. Pārbaudi un kopē to uz atļauto pārdošanas platformu. 4. Atzīmē faktisko pārdošanas cenu, kad prece pārdota.</p><p class="tiny">*Peļņa šeit ir pārdošanas cena mīnus iegādes cena un ievadītās papildu izmaksas. Tā nav nodokļu vai grāmatvedības atskaite.</p></div>
+</section>
+<section class="page" id="form">
+<div class="card"><h2 id="formHeading">Pievienot preci</h2><form id="productForm">
+<input id="id" type="hidden">
+<label for="photoInput">Preces foto (neobligāti)</label><input id="photoInput" type="file" accept="image/*" capture="environment">
+<div id="photoPreviewWrap" class="hidden" style="margin-top:8px"><img id="photoPreview" class="photo" alt="Preces foto"><button type="button" class="btn secondary" id="removePhoto">Noņemt foto</button></div>
+<div class="formgrid">
+<div><label for="name">Nosaukums *</label><input id="name" required placeholder="Piem., džinsu jaka"></div>
+<div><label for="brand">Zīmols</label><input id="brand" placeholder="Ja zināms"></div>
+<div><label for="size">Izmērs uz etiķetes</label><input id="size" placeholder="Piem., M"></div>
+<div><label for="color">Krāsa</label><input id="color" placeholder="Piem., tumši zila"></div>
+<div><label for="category">Kategorija</label><select id="category"><option>Apģērbs</option><option>Apavi</option><option>Soma</option><option>Aksesuāri</option><option>Cits</option></select></div>
+<div><label for="condition">Stāvoklis</label><select id="condition"><option>Ļoti labs</option><option>Labs</option><option>Apmierinošs</option><option>Ar defektiem</option><option>Jauns ar birkām</option><option>Jauns bez birkām</option></select></div>
+<div><label for="buy">Iegādes cena (€) *</label><input id="buy" type="number" min="0" step=".01" required value="0"></div>
+<div><label for="extra">Papildu izmaksas (€)</label><input id="extra" type="number" min="0" step=".01" value="0"></div>
+<div><label for="ask">Plānotā cena (€)</label><input id="ask" type="number" min="0" step=".01" placeholder="0.00"></div>
+<div><label for="sale">Faktiskā pārdošanas cena (€)</label><input id="sale" type="number" min="0" step=".01" placeholder="Pēc pārdošanas"></div>
+<div><label for="status">Statuss</label><select id="status"><option>Jāsagatavo</option><option>Gatavs publicēšanai</option><option>Publicēts</option><option>Rezervēts</option><option>Pārdots</option><option>Izņemts</option></select></div>
+<div><label for="channel">Pārdošanas kanāls</label><input id="channel" placeholder="Atļautā platforma"></div>
+</div>
+<label for="notes">Defekti / piezīmes</label><textarea id="notes" placeholder="Norādi defektus un būtiskās detaļas godīgi."></textarea>
+<div class="actions"><button class="btn" type="submit">Saglabāt preci</button><button class="btn secondary" type="button" id="makeDraft">Sagatavot sludinājumu</button><button class="btn secondary" type="button" id="clearForm">Notīrīt</button></div>
+</form></div>
+<div class="card"><h2>Sludinājuma melnraksts</h2><div id="draft" class="output">Aizpildi preces datus un izvēlies “Sagatavot sludinājumu”.</div><div class="actions"><button class="btn secondary" id="copyDraft">Kopēt tekstu</button></div><p class="tiny">Pārbaudi visu tekstu. Neizdomā zīmolu, autentiskumu, izmēru vai stāvokli, ja to nevari apstiprināt.</p></div>
+</section>
+<section class="page" id="inventory">
+<div class="card"><h2>Preču katalogs</h2><label for="search">Meklēt</label><input id="search" placeholder="Nosaukums, zīmols, izmērs…" autocomplete="off">
+<div class="formgrid"><div><label for="filterStatus">Statuss</label><select id="filterStatus"><option value="">Visi statusi</option><option>Jāsagatavo</option><option>Gatavs publicēšanai</option><option>Publicēts</option><option>Rezervēts</option><option>Pārdots</option><option>Izņemts</option></select></div><div><label for="sort">Kārtot</label><select id="sort"><option value="new">Jaunākās</option><option value="profit">Lielākā peļņa</option><option value="price">Augstākā cena</option></select></div></div><div id="inventoryList"></div></div>
+</section>
+<section class="page" id="messages">
+<div class="card"><h2>Pircēju atbilžu šabloni</h2><p class="muted">Pielāgo tekstu un nosūti manuāli platformā, kurā notiek saruna.</p>
+<div><h3>Par izmēru</h3><div class="output" id="tSize">Sveiki! Uz etiķetes norādīts [izmērs]. Ja nepieciešams, varu izmērīt preces garumu un platumu.</div><button class="btn secondary copyTemplate" data-id="tSize">Kopēt</button></div><hr>
+<div><h3>Par stāvokli</h3><div class="output" id="tCondition">Sveiki! Preces stāvoklis ir [stāvoklis]. [Norādi redzamos defektus vai lietojuma pazīmes].</div><button class="btn secondary copyTemplate" data-id="tCondition">Kopēt</button></div><hr>
+<div><h3>Par cenu</h3><div class="output" id="tPrice">Paldies par piedāvājumu! Varu apsvērt cenu [summa] €. Vai šis variants jums der?</div><button class="btn secondary copyTemplate" data-id="tPrice">Kopēt</button></div><hr>
+<div><h3>Par komplektu</h3><div class="output" id="tBundle">Paldies par interesi! Atsūtiet, lūdzu, kuras preces vēlaties apvienot, un es sagatavošu kopējo piedāvājumu.</div><button class="btn secondary copyTemplate" data-id="tBundle">Kopēt</button></div>
+</div></section>
+<section class="page" id="backup">
+<div class="card"><h2>Datu pārvaldība</h2><p class="muted">Eksportē JSON, lai saglabātu fotoattēlus un visus preču datus. CSV paredzēts darbam ar izklājlapām, un tas neiekļauj fotoattēlus.</p><div class="actions"><button class="btn" id="exportJson">Lejupielādēt JSON kopiju</button><button class="btn secondary" id="exportCsv2">Lejupielādēt CSV</button><button class="btn secondary" id="importBtn">Atjaunot no JSON</button><input id="importFile" type="file" accept=".json,application/json" class="hidden"></div><p class="tiny">Importējot, pašreizējais katalogs tiks aizstāts. Vispirms izveido rezerves kopiju.</p></div>
+<div class="card"><h2>Privātums</h2><p class="muted">Šī prototipa dati paliek ierīces pārlūkprogrammā. Nav kontu, mākoņa sinhronizācijas vai automātiskas nosūtīšanas. Neizmanto publisku vai koplietotu ierīci sensitīvu datu glabāšanai.</p><button class="btn danger" id="deleteAll">Dzēst visus datus</button></div>
+</section>
+<footer>Resell Assistant · neatkarīgs prototips, nav Vinted produkts</footer>
+</main>
+<div id="toast" class="toast hidden" role="status"></div>
+<script>
+'use strict';
+const DB_KEY='resell-assistant-v2';
+let products=[];let photoData='';let toastTimer;
+const $=id=>document.getElementById(id);
+function notify(msg){const el=$('toast');el.textContent=msg;el.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.add('hidden'),2400)}
+function money(v){return (Number(v||0)).toLocaleString('lv-LV',{style:'currency',currency:'EUR'})}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function load(){try{const d=localStorage.getItem(DB_KEY);products=d?JSON.parse(d):[];if(!Array.isArray(products))products=[]}catch(e){products=[];notify('Neizdevās nolasīt datus. Atjauno no JSON rezerves kopijas.')}}
+function save(){try{localStorage.setItem(DB_KEY,JSON.stringify(products));render();return true}catch(e){notify('Krātuve pilna. Eksportē datus un samazini foto izmēru.');return false}}
+function cost(p){return Number(p.buy||0)+Number(p.extra||0)}
+function profit(p){return p.sale===null||p.sale===undefined||p.sale===''?0:Number(p.sale)-cost(p)}
+function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('[data-page]').forEach(x=>{const on=x.dataset.page===id;x.classList.toggle('active',on);x.classList.toggle('secondary',!on)});if(id==='inventory')renderInventory();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+$('newProduct').onclick=()=>{resetForm();showPage('form')};
+$('photoInput').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{photoData=await compressImage(file);showPhoto(photoData)}catch(err){notify('Foto neizdevās ielādēt. Mēģini citu attēlu.')}});
+function compressImage(file){return new Promise((resolve,reject)=>{const fr=new FileReader();fr.onerror=reject;fr.onload=()=>{const img=new Image();img.onerror=reject;img.onload=()=>{const max=700,scale=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);c.getContext('2d').drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL('image/jpeg',.72))};img.src=fr.result};fr.readAsDataURL(file)})}
+function showPhoto(data){if(data){$('photoPreview').src=data;$('photoPreviewWrap').classList.remove('hidden')}else{$('photoPreview').removeAttribute('src');$('photoPreviewWrap').classList.add('hidden')}}
+$('removePhoto').onclick=()=>{photoData='';$('photoInput').value='';showPhoto('')};
+function formData(){return {id:$('id').value||String(Date.now())+'-'+Math.random().toString(36).slice(2,7),name:$('name').value.trim(),brand:$('brand').value.trim(),size:$('size').value.trim(),color:$('color').value.trim(),category:$('category').value,condition:$('condition').value,buy:Number($('buy').value||0),extra:Number($('extra').value||0),ask:$('ask').value===''?null:Number($('ask').value),sale:$('sale').value===''?null:Number($('sale').value),status:$('status').value,channel:$('channel').value.trim(),notes:$('notes').value.trim(),photo:photoData||'',createdAt:new Date().toISOString()}}
+$('productForm').addEventListener('submit',e=>{e.preventDefault();const p=formData();if(!p.name){notify('Ievadi preces nosaukumu.');return}if(p.buy<0||p.extra<0||(p.ask!==null&&p.ask<0)||(p.sale!==null&&p.sale<0)){notify('Cenas nevar būt negatīvas.');return}const i=products.findIndex(x=>x.id===p.id);if(i>=0){p.createdAt=products[i].createdAt||p.createdAt;if(!p.photo)p.photo=products[i].photo||'';products[i]=p}else products.unshift(p);if(save()){resetForm();showPage('inventory');notify('Prece saglabāta.')}});
+function resetForm(){ $('productForm').reset();$('id').value='';$('formHeading').textContent='Pievienot preci';$('buy').value='0';$('extra').value='0';photoData='';showPhoto('');$('draft').textContent='Aizpildi preces datus un izvēlies “Sagatavot sludinājumu”.'}
+$('clearForm').onclick=resetForm;
+function fillForm(p){$('id').value=p.id;$('formHeading').textContent='Rediģēt preci';['name','brand','size','color','category','condition','buy','extra','ask','sale','status','channel','notes'].forEach(k=>{if($(k))$(k).value=p[k]??''});photoData=p.photo||'';showPhoto(photoData);showPage('form')}
+function makeDraft(){const p=formData();if(!p.name){notify('Vispirms ievadi preces nosaukumu.');return}const title=[p.brand,p.name,p.size?'izmērs '+p.size:'',p.color].filter(Boolean).join(' ');const body=[p.name+(p.brand?' — '+p.brand:''),p.size?'Izmērs uz etiķetes: '+p.size+'.':'',p.color?'Krāsa: '+p.color+'.':'','Stāvoklis: '+p.condition+'.',p.notes?'Piezīmes / defekti: '+p.notes:''].filter(Boolean).join('\n');$('draft').textContent=title+'\n\n'+body+(p.ask!==null?'\n\nPlānotā cena: '+money(p.ask):'')}
+$('makeDraft').onclick=makeDraft;
+async function copyText(text){try{await navigator.clipboard.writeText(text);notify('Teksts nokopēts.')}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');notify('Teksts nokopēts.')}catch(_){notify('Kopēšana nav pieejama — atzīmē un kopē tekstu manuāli.')}ta.remove()}}
+$('copyDraft').onclick=()=>copyText($('draft').textContent);
+document.querySelectorAll('.copyTemplate').forEach(b=>b.onclick=()=>copyText($(b.dataset.id).textContent));
+$('search').addEventListener('input',renderInventory);$('filterStatus').addEventListener('change',renderInventory);$('sort').addEventListener('change',renderInventory);
+function render(){ $('mTotal').textContent=products.length;$('mSold').textContent=products.filter(p=>p.status==='Pārdots').length;$('mStock').textContent=money(products.filter(p=>p.status!=='Pārdots'&&p.status!=='Izņemts').reduce((s,p)=>s+cost(p),0));$('mProfit').textContent=money(products.filter(p=>p.status==='Pārdots').reduce((s,p)=>s+profit(p),0));$('recentList').innerHTML=products.length?products.slice(0,4).map(p=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)"><b>${esc(p.name)}</b> <span class="pill">${esc(p.status)}</span><div class="meta">Pašizmaksa ${money(cost(p))} · Cena ${p.sale!==null?money(p.sale):money(p.ask)}</div></div>`).join(''):'Pievieno pirmo preci, lai sāktu.';renderInventory()}
+function renderInventory(){if(!$('inventoryList'))return;const q=($('search').value||'').toLowerCase(),f=$('filterStatus').value,sort=$('sort').value;let list=products.filter(p=>[p.name,p.brand,p.size,p.color,p.category].join(' ').toLowerCase().includes(q)&&(!f||p.status===f));if(sort==='profit')list.sort((a,b)=>profit(b)-profit(a));if(sort==='price')list.sort((a,b)=>(b.ask||0)-(a.ask||0));$('inventoryList').innerHTML=list.length?list.map(p=>`<article class="product"><img class="photo" src="${p.photo||''}" alt="" onerror="this.style.visibility='hidden'"><div><div class="prodtitle">${esc(p.name)}</div><div class="meta">${esc([p.brand,p.size?'izm. '+p.size:'',p.color].filter(Boolean).join(' · '))}</div><span class="pill">${esc(p.status)}</span><div class="meta">Pašizmaksa: ${money(cost(p))} · Plānotā: ${money(p.ask)}</div><div class="meta">${p.status==='Pārdots'?'Peļņa: '+money(profit(p)):'Paredzamā peļņa: '+money((p.ask||0)-cost(p))}</div><div class="actions"><button class="btn secondary" data-action="edit" data-id="${esc(p.id)}">Rediģēt</button><button class="btn secondary" data-action="draft" data-id="${esc(p.id)}">Teksts</button>${p.status!=='Pārdots'?`<button class="btn" data-action="sold" data-id="${esc(p.id)}">Atzīmēt pārdotu</button>`:''}<button class="btn danger" data-action="delete" data-id="${esc(p.id)}">Dzēst</button></div></div></article>`).join(''):'<p class="muted">Nav atrastu preču.</p>'}
+$('inventoryList').addEventListener('click',e=>{const b=e.target.closest('button[data-action]');if(!b)return;const p=products.find(x=>x.id===b.dataset.id);if(!p)return;switch(b.dataset.action){case'edit':fillForm(p);break;case'draft':fillForm(p);makeDraft();break;case'sold':{const v=prompt('Faktiskā pārdošanas cena (€):',p.ask??'');if(v===null)return;if(v.trim()===''||!Number.isFinite(Number(v))||Number(v)<0){notify('Ievadi derīgu cenu.');return}p.sale=Number(v);p.status='Pārdots';p.soldAt=new Date().toISOString();save();notify('Pārdošana saglabāta.');break}case'delete':if(confirm('Dzēst šo preci?')){products=products.filter(x=>x.id!==p.id);save();notify('Prece dzēsta.')}break}});
+function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function exportJSON(){download(new Blob([JSON.stringify(products,null,2)],{type:'application/json'}),'resell-assistant-backup.json');notify('JSON kopija sagatavota.')}
+function exportCSV(){const cols=['id','name','brand','size','color','category','condition','buy','extra','ask','sale','status','channel','notes'];const csv=[cols.join(';'),...products.map(p=>cols.map(k=>'"'+String(p[k]??'').replace(/"/g,'""')+'"').join(';'))].join('\r\n');download(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),'resell-assistant.csv');notify('CSV sagatavots.')}
+$('exportJson').onclick=exportJSON;$('backupNow').onclick=exportJSON;$('exportCsv').onclick=exportCSV;$('exportCsv2').onclick=exportCSV;
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d)||!d.every(p=>p&&p.id&&p.name))throw new Error('bad');if(!confirm('Atjaunot '+d.length+' preces? Esošais katalogs tiks aizstāts.'))return;products=d;if(save())notify('Rezerves kopija atjaunota.')}catch(err){notify('Šis JSON fails nav derīga rezerves kopija.')}finally{$('importFile').value=''}};r.readAsText(f)});
+$('deleteAll').onclick=()=>{if(confirm('Tiešām dzēst visas preces no šīs pārlūkprogrammas? Šo darbību nevar atsaukt.')){products=[];save();notify('Dati dzēsti.')}};
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+load();render();
+</script>
+</body>
+</html>

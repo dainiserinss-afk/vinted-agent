@@ -1,0 +1,11 @@
+{
+  "name": "Resell Assistant",
+  "short_name": "Resell",
+  "description": "Apģērbu katalogs, sludinājumu sagatavošana un peļņas uzskaite",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f2",
+  "theme_color": "#193c2b",
+  "icons": []
+}
